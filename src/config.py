@@ -8,6 +8,7 @@ kit = MotorKit()
 # Available: motor1, motor2, motor3, and motor4 
 l_motorKit = kit.motor1
 r_motorKit = kit.motor2
+test_motorKit = kit.motor4
 
 encoder_pins = [board.D5, board.D6, board.D9, board.D10, board.D11, board.D12, board.D13]
 
