@@ -1,4 +1,3 @@
-from telnetlib import theNULL
 import time
 from adafruit_motorkit import MotorKit
 from encoder import Encoder
@@ -35,7 +34,7 @@ class Motor:
         time.sleep(0.5)
         self.kit.motor1.throttle = 0
 
-    def get_speed(self, start_enc_val, interval=CHECK_PERIOD):
+    def get_speed(self, interval=CHECK_PERIOD):
         current_pos = self.encoder.get_postiion()
         rate = (current_pos - self.pos) / interval
         self.pos = current_pos 
