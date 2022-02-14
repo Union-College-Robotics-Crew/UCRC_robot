@@ -13,15 +13,9 @@ class IR_sensor_tests:
 		self.ir6 = ir_sensor.IR_sensor(config.rFwd_ir)
 	
 
-	def test_ir(amt_readings):
+	def test_ir(self, amt_readings):
 		for i in range(amt_readings):
-#       			print("ir1: ", self.ir1)
-# 			print("ir2: ", self.ir2)
-# 			print("ir3: ", self.ir3)
-# 			print("ir4: ", self.ir4)
-# 			print("ir5: ", self.ir5)
-# 			print("ir6: ", self.ir6)
-			print(self.ir1, self.ir2, self.ir3, self.ir4, self.ir5, self.ir6)
+			print((self.ir1.read(), self.ir2.read(), self.ir3.read(), self.ir4.read(), self.ir5.read(), self.ir6.read()),)
 			time.sleep(1)
 IR_tests = IR_sensor_tests()
 print(IR_tests.test_ir(1000))
