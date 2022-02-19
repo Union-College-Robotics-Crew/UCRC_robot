@@ -13,6 +13,8 @@ test_motorKit = kit.motor4
 # Encoder pins in use currently:
 pin_D5 = board.D5
 pin_D6 = board.D6
+pind_D9 = board.D9
+pin_D10 = board.D10
 
 # Issue with IncrementalEncoder in config file; will simply use pins from above 
 

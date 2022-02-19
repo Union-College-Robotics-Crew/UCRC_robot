@@ -39,3 +39,10 @@ class Motor:
         rate = (current_pos - self.pos) / interval
         self.pos = current_pos 
         return rate
+
+
+    # Returns the encoder count; starting point is the robot's initialization 
+    def position(self):
+        return self.encoder.get_position()
+
+    
