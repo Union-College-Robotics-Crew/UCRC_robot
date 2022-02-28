@@ -2,7 +2,6 @@ import config
 import micromouse
 
 
-
 class robot(micromouse):
     def __init__(self):
         self.__l_motor = motor(config.l_motorKit, config.l_encoder)
@@ -35,15 +34,15 @@ class robot(micromouse):
 
     def wallFront(self):
         if (self.__lFwd_ir == self.__target_wall_values["TARGET_VAL_L_FWD_IR"]) and (self.__rFwd_ir == self.__target_wall_values["TARGET_VAL_R_FWD_IR"]):
-            return true
+            return True
         else:
-            return false
+            return False
 
     def wallLeft(self):
-        if self.__l_ir == TARGET_VAL_L_IR:
-            return true
+        if (self.__l_ir == self.__target_wall_values["TARGET_VAL_L_IR"]) and (self.__lFwd_ir == self.__target_wall_values["TARGET_VAL_L_FWD_IR"]):
+            return True
         else:
-            return false
+            return False
 
 
 
