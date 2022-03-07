@@ -28,7 +28,7 @@ class IR_sensor:
     def ir_reading(self):
         adc_readings = []
         while True:
-            cm_val = convert_ADC_to_CM(self.port.value)
+            cm_val = self.convert_ADC_to_CM(self.port.value)
             adc_readings.append(cm_val)
            # print("18ms have passed")
             time.sleep(.0018)
