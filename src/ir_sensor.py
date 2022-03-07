@@ -11,9 +11,8 @@ class IR_sensor:
         self.port = adc
         
     def __str__(self):
-        return (self.ir_reading(),)
-    
-    #adc = analogio.AnalogIn(port)
+        return self.read()
+      
     def median(self, lst = []):
         return np.median(lst)
     def convert_ADC_to_CM(self, adc_val):
@@ -25,12 +24,13 @@ class IR_sensor:
         
         return d
         
-    def ir_reading(self):
+    def read(self):
         adc_readings = []
         while True:
             cm_val = self.convert_ADC_to_CM(self.port.value)
             adc_readings.append(cm_val)
            # print("18ms have passed")
+            adc_readings.append(self.port.value)
             time.sleep(.0018)
             if len(adc_readings) % 10 == 0:
                 return_val= self.median(np.array(adc_readings))
