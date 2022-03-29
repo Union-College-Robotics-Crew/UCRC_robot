@@ -20,11 +20,11 @@ class IR_sensor:
         a = 0.000005  # linear member
         b = 0.0609  # free member
         k = 2   # Corrective Constant
-
+        
         d = (1 / a) / (adc_val + b / a) - k
 
         return d
-
+  
     def read(self):
         adc_readings = []
         while True:
