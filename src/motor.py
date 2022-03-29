@@ -39,26 +39,6 @@ class Motor:
         self.pos = current_pos 
         return rate
 
-        # Current Hard-coded Conversion Rates
-        # if (rate < 150):
-        #     return rate / 555
-        # elif (rate < 200):
-        #     return rate / 625
-        # elif (rate < 235):
-        #     return rate / 570
-        # elif (rate < 257):
-        #     return rate / 501
-        # elif (rate < 270):
-        #     return rate / 444
-        # elif (rate < 280):
-        #     return rate / 396
-        # elif (rate < 290):
-        #     return rate / 355
-        # elif (rate < 295):
-        #     return rate / 323
-        # else:
-        #     return rate / 300
-
 
     # Returns the encoder count; starting point is the robot's initialization 
     def position(self):
