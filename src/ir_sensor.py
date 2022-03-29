@@ -7,7 +7,7 @@ import time
 class IR_sensor:
     
     def __init__(self, ir_config):
-        adc= ir_config
+        adc = ir_config
         self.port = adc
         
     def __str__(self):
@@ -15,6 +15,7 @@ class IR_sensor:
 
     def median(self, lst = []):
         return np.median(lst)
+
     def convert_ADC_to_CM(self, adc_val):
         a = 0.000005  # linear member
         b = 0.0609  # free member
@@ -24,7 +25,7 @@ class IR_sensor:
 
         return d
 
-    def ir_reading(self):
+    def read(self):
         adc_readings = []
         while True:
             cm_val = self.convert_ADC_to_CM(self.port.value)

@@ -38,8 +38,8 @@ class Robot:
         self.__lFwd_ir = IR_sensor(config.lFwd_ir)
         self.__rFwd_ir = IR_sensor(config.rFwd_ir)
 
-        self.__target_left = self.__l_ir.ir_reading()
-        self.__target_right = self.__r_ir.ir_reading()
+        self.__target_left = self.__l_ir.read()
+        self.__target_right = self.__r_ir.read()
         self.__offset = self.__target_right - self.__target_left
 
         self.__error = 0
@@ -59,13 +59,13 @@ class Robot:
 
             if (self.wallLeft() and self.wallRight()):
                 config.pixel.fill(config.Color["white"])
-                self.__error = self.__r_ir.ir_reading() - self.__l_ir.ir_reading() - self.__offset
+                self.__error = self.__r_ir.read() - self.__l_ir.read() - self.__offset
             elif (self.wallLeft()):
                 config.pixel.fill(config.Color["yellow"])
-                self.__error = 2 * (self.__target_left - self.__l_ir.ir_reading())
+                self.__error = 2 * (self.__target_left - self.__l_ir.read())
             elif (self.wallRight()):
                 config.pixel.fill(config.Color["purple"])
-                self.__error = 2 * (self.__r_ir.ir_reading() - self.__target_right)
+                self.__error = 2 * (self.__r_ir.read() - self.__target_right)
             else:
                 self.__encCorrection(l_start_pos, r_start_pos)
                 use_PID = False
@@ -105,19 +105,19 @@ class Robot:
         return True
 
     def wallLeft(self):
-        if (self.__l_ir.ir_reading() <= HAS_LEFT):
+        if (self.__l_ir.read() <= HAS_LEFT):
             return True
         else:
             return False
 
     def wallRight(self):
-        if (self.__r_ir.ir_reading() <= HAS_RIGHT):
+        if (self.__r_ir.read() <= HAS_RIGHT):
             return True
         else:
             return False
 
     def wallFront(self):
-        if ((self.__lFwd_ir.ir_reading() <= self.__target_left) and (self.__rFwd_ir.ir_reading() <= self.__target_right)):
+        if ((self.__lFwd_ir.read() <= self.__target_left) and (self.__rFwd_ir.read() <= self.__target_right)):
             return True
         else:
             return False
