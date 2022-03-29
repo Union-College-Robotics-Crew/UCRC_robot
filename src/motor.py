@@ -33,7 +33,7 @@ class Motor:
     def brake(self):
         self.motor.throttle = 0.0
 
-    def get_speed(self, interval=CHECK_PERIOD):
+    def get_speed(self, interval):
         current_pos = self.encoder.get_postiion()
         rate = (current_pos - self.pos) / interval
         self.pos = current_pos 

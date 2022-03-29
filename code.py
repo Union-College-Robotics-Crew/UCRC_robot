@@ -1,50 +1,28 @@
-from json import encoder
 import time
 import board
-from src import config
+import config
 from src.motor import Motor
 from src.encoder import Encoder
 from src.ir_sensor import IR_sensor
 from adafruit_motorkit import MotorKit
 import rotaryio
+import analogio
+from src.robot import Robot
 
-NUM_READINGS = 1000
+NUM_CELLS = 4
 
-test_motor = Motor(config.test_motorKit, config.l_encoder)
+# Temporary Encoder Configuration:
+encL = rotaryio.IncrementalEncoder(config.l_encA, config.l_encB)
+encR = rotaryio.IncrementalEncoder(config.r_encA, config.r_encB)
 
-plot_speed = True
-plot_position = False
+time.sleep(10)
 
-speed = 0
-actual_speed = 0
-while (plot_speed):
-    while (speed < 1):
-        start_position = test_motor.run(speed)
-        time.sleep(1)
-        actual_speed = test_motor.get_speed(start_position, 1)
-        print((actual_speed,))
+test_robot = Robot(encL, encR)
 
-        speed += 0.1
+# continueForward() always returns True --> one forward call = infinite
+iteration = 0
+while (iteration < 4):
+    test_robot.forward()
+    iteration += 1
 
-    while (speed > 0):
-        start_position = test_motor.run(speed)
-        time.sleep(1)
-        actual_speed = test_motor.get_speed(start_position, 1)
-        speed -= 0.1
-
-speed = 0
-while (plot_position):
-    while (speed < 1):
-        test_motor.run(speed)
-        time.sleep(1)
-        cur_position = test_motor.get_enc_position
-        print((cur_position,))
-        speed += 0.1
-
-    while (speed > 0):
-        test_motor.run(speed)
-        time.sleep(1)
-        cur_position = test_motor.get_enc_position
-        print((cur_position,))
-        speed -= 0.1
-
+test_robot.brake()
