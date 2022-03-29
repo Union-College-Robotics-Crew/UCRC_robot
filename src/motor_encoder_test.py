@@ -52,7 +52,13 @@ class MotorEncoderTest:
                 time_passed += interval
                 actual_speed1 = test_motor1.get_speed(interval)
                 actual_speed2 = test_motor2.get_speed(interval)
-                print((actual_speed1, actual_speed2, speed,))
+                print("INPUT SPEED:")
+                print(speed)
+                print("ACTUAL LEFT:")
+                print()
+                print((actual_speed1, actual_speed2,))
+                # print((actual_speed1, actual_speed2, speed,))
+                
                 speed += 0.1
 
             speed = 1
@@ -63,7 +69,11 @@ class MotorEncoderTest:
                 time.sleep(interval)
                 time_passed += interval
                 actual_speed = test_motor1.get_speed(interval)
-                print((actual_speed1, actual_speed2, speed,))
+                print("INPUT SPEED:")
+                print(speed)
+                print((actual_speed1, actual_speed2,))
+                # print((actual_speed1, actual_speed2, speed,))
+
                 speed -= 0.1
 
             readings += 1

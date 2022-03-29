@@ -4,41 +4,60 @@ from encoder import Encoder
 import board
 import config
 
-# NEEDS TO BE CALCULATED!
-COUNT_TO_THROTTLE = 1
-THROTTLE_TO_COUNT = 1
-CHECK_PERIOD = 10
+MAX_SPEED = 1
+MIN_SPEED = 0.2
 
 class Motor:
 
-    def __init__(self, motor_config, enc_pinA, enc_pinB):
+    def __init__(self, motor_config, enc_config):
         self.motor = motor_config
         self.pos = 0
-        self.encoder = Encoder(enc_pinA, enc_pinB)
+        self.encoder = Encoder(enc_config)
         self.prev_error = 0
 
     def __repr__(self):
         return str(self.actual_speed)
 
-    #Temporary run method, without PID control
+    #Run method, without PID control
     #Returns encoder position 
     def run(self, given_speed):
-        self.motor.throttle = given_speed
+        if (given_speed > MAX_SPEED):
+            self.motor.throttle = MAX_SPEED
+        elif (given_speed < MIN_SPEED):
+            self.motor.throttle = MIN_SPEED
+        else:
+            self.motor.throttle = given_speed
         self.pos = self.encoder.get_position()
         return self.encoder.get_position()
 
-    # Questionable brake method
     def brake(self):
-        # STEADY/GRADUAL STOP
-        self.kit.motor1.throttle = None
-        time.sleep(0.5)
-        self.kit.motor1.throttle = 0
+        self.motor.throttle = 0.0
 
     def get_speed(self, interval=CHECK_PERIOD):
         current_pos = self.encoder.get_postiion()
         rate = (current_pos - self.pos) / interval
         self.pos = current_pos 
         return rate
+
+        # Current Hard-coded Conversion Rates
+        # if (rate < 150):
+        #     return rate / 555
+        # elif (rate < 200):
+        #     return rate / 625
+        # elif (rate < 235):
+        #     return rate / 570
+        # elif (rate < 257):
+        #     return rate / 501
+        # elif (rate < 270):
+        #     return rate / 444
+        # elif (rate < 280):
+        #     return rate / 396
+        # elif (rate < 290):
+        #     return rate / 355
+        # elif (rate < 295):
+        #     return rate / 323
+        # else:
+        #     return rate / 300
 
 
     # Returns the encoder count; starting point is the robot's initialization 
