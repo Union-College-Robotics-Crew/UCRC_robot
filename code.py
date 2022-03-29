@@ -1,18 +1,28 @@
-
-import rotaryio
-import board
 import time
+import board
+import config
+from src.motor import Motor
 from src.encoder import Encoder
+from src.ir_sensor import IR_sensor
+from adafruit_motorkit import MotorKit
+import rotaryio
+import analogio
+from src.robot import Robot
 
+NUM_CELLS = 4
 
-pin_A= board.D5
-pin_B= board.D6
-encoder1= Encoder(pin_A,pin_B)
+# Temporary Encoder Configuration:
+encL = rotaryio.IncrementalEncoder(config.l_encA, config.l_encB)
+encR = rotaryio.IncrementalEncoder(config.r_encA, config.r_encB)
 
-while True:
-    #motor.run(0
-    time.sleep(.01)
-    print(encoder1.count())
+time.sleep(10)
 
+test_robot = Robot(encL, encR)
 
+# continueForward() always returns True --> one forward call = infinite
+iteration = 0
+while (iteration < 4):
+    test_robot.forward()
+    iteration += 1
 
+test_robot.brake()
