@@ -6,6 +6,7 @@ import analogio
 import config
 from src.motor import Motor
 from src.ir_sensor import IR_sensor
+from src.magnetometer import Magnetometer
 
 # Proportional, Derivative, and Integral Gains:
 KP = 0.05
@@ -37,6 +38,7 @@ class Robot:
         self.__r_ir = IR_sensor(config.r_ir)
         self.__lFwd_ir = IR_sensor(config.lFwd_ir)
         self.__rFwd_ir = IR_sensor(config.rFwd_ir)
+        self.__magnetometer = Magnetometer()
 
         self.__target_left = self.__l_ir.read()
         self.__target_right = self.__r_ir.read()
@@ -126,6 +128,41 @@ class Robot:
         self.__l_motor.brake()
         self.__r_motor.brake()
 
+    def turnRight(self):
+        config.pixel.fill(config.Color["white"])
+        target_heading = self.__magnetometer.heading() + 90
+        if (target_heading > 360):
+          target_heading -= 360
+          special_case = True 
+
+        if (special_case):
+          while (self.__magnetometer.heading() <= 360 and self.__magnetometer.heading() >= 270):
+              config.pixel.fill(config.Color["green"])
+
+        while (self.__magnetometer.heading() <= target_heading):
+          config.pixel.fill(config.Color["yellow"])
+
+        self.brake()
+        config.pixel.fill(config.Color["red"])
+
+    def turnLeft(self):
+        config.pixel.fill(config.Color["white"])
+        target_heading = self.__magnetometer.heading() - 90
+        if (target_heading < 0):
+          target_heading += 360
+          special_case = True 
+
+        if (special_case):
+          while (self.__magnetometer.heading() >= 0 and self.__magnetometer.heading() <= 90):
+              config.pixel.fill(config.Color["green"])
+
+        while (self.__magnetometer.heading() >= target_heading):
+          config.pixel.fill(config.Color["yellow"])
+
+        self.brake()
+        config.pixel.fill(config.Color["red"])
+
+
 
     # Encoder Correction - corrects robot direction with left/right encoders:
     def __encCorrection(self, l_pos, r_pos):
@@ -144,3 +181,40 @@ class Robot:
 
         self.__l_motor.run(l_speed)
         self.__r_motor.run(r_speed)
+
+# TURNING ISSUE TO SOLVE:
+# Whenever turning in the range where the "heading" changes from 0 --> 360 OR 360--> 0;
+# What should the loop condition be then?
+
+# Pseudocode of TURN RIGHT:
+
+# target_heading = self.__magnetometer.heading() + 90
+# if (target_heading > 360):
+#   target_heading -= 360
+#   special_case = True 
+
+# if (special_case):
+#   while (self.__magnetometer.heading() <= 360 and self.__magnetometer.heading() >= 270):
+#       rotate right
+
+# while (self.__magnetometer.heading() <= target_heading):
+#   rotate right
+
+# self.brake()
+
+
+# Pseudocode of TURN LEFT:
+
+# target_heading = self.__magnetometer.heading() - 90
+# if (target_heading < 0):
+#   target_heading += 360
+#   special_case = True 
+
+# if (special_case):
+#   while (self.__magnetometer.heading() >= 0 and self.__magnetometer.heading() <= 90):
+#       rotate left
+
+# while (self.__magnetometer.heading() >= target_heading):
+#   rotate left
+
+# self.brake()
