@@ -1,6 +1,6 @@
 import time
 from adafruit_motorkit import MotorKit
-from encoder import Encoder
+from src.encoder import Encoder
 import board
 import config
 
