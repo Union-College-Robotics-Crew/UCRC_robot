@@ -4,6 +4,9 @@ import board
 import analogio
 from ulab import numpy as np
 import time
+
+VALIDATION_NUM = 20
+
 class IR_sensor:
     
     def __init__(self, ir_config):
@@ -27,11 +30,16 @@ class IR_sensor:
   
     def read(self):
         adc_readings = []
-        while True:
+        for i in range(0,VALIDATION_NUM):
             cm_val = self.convert_ADC_to_CM(self.port.value)
             adc_readings.append(cm_val)
-            time.sleep(.0018)
-            if len(adc_readings) % 10 == 0:
-                return_val= self.median(np.array(adc_readings))
-                adc_readings=[]
-                return return_val
+            time.sleep(.0001)
+        return_val= self.median(np.array(adc_readings))
+        return return_val
+
+
+    def calibrate(self):
+        readings = []
+        for i in range(0,10):
+            readings.append(self.read())
+        self.initVal = np.median(np.array(readings))
