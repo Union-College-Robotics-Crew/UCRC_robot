@@ -32,6 +32,7 @@ class Robot:
         config.pixel.fill(config.Color["green"])
         self.__l_motor = Motor(config.l_motorKit, l_enc)
         self.__r_motor = Motor(config.r_motorKit, r_enc)
+
         self.__lAng_ir = IR_sensor(config.lAng_ir)
         self.__rAng_ir = IR_sensor(config.rAng_ir)
         self.__l_ir = IR_sensor(config.l_ir)
@@ -44,9 +45,21 @@ class Robot:
         self.__target_right = self.__r_ir.read()
         self.__offset = self.__target_right - self.__target_left
 
+        self.skipBeam = False
+        self.timeFound_BEAM = time.monotonic()
+        
+        self.calibrate()
         self.__error = 0
         self.__prev_error = 0
         self.__integral_error = 0
+
+    def calibrate(self):
+        self.__l_ir.calibrate()
+        self.__r_ir.calibrate()
+        self.__lAng_ir.calibrate()
+        self.__rAng_ir.calibrate()
+        self.__lFwd_ir.calibrate()
+        self.__rFwd_ir.calibrate()
 
     def forward(self):
         l_speed = BASE_SPEED
@@ -100,7 +113,90 @@ class Robot:
         self.brake()
 
 
+    def isCornerBeam(self):
+        l_ang=self.__lAng_ir.read()
+        r_ang=self.__rAng_ir.read()
+
+        l=self.__l_ir.read()
+        r=self.__r_ir.read()
+
+        l_frwd = self.__lFwd_ir.read()
+        r_frwd = self.__rFwd_ir.read()
+
+        lrAng_sum = l_ang + r_ang
+        lr_sum = l + r
+
+        
+
+        l_angInit= self.__lAng_ir.initVal
+        r_angInit= self.__rAng_ir.initVal
+
+        l_Init = self.__l_ir.initVal
+        r_Init = self.__r_ir.initVal
+
+        #straight
+        if (l_ang> self.__lAng_ir.initVal + .4) and (r_ang> self.__rAng_ir.initVal + .4):
+            # if (l_ang> self.__lAng_ir.initVal + 2) or (r_ang> self.__rAng_ir.initVal + 2):
+            #     return False
+            self.skipBeam = False
+            self.timeFound_BEAM = time.monotonic()
+            return True
+        
+        if (l_ang> self.__lAng_ir.initVal + .4):
+            # if (l > l_Init + .4):
+            # if (l_ang> self.__lAng_ir.initVal + 2): #no wall on left
+            #     return False
+            if self.skipBeam:
+                self.skipBeam = False
+                self.timeFound_BEAM = time.monotonic()
+                return False
+            else:
+                self.skipBeam = True
+                self.timeFound_BEAM = time.monotonic()
+                return True
+
+        #left oriented
+        # if (r > r_Init + .4):
+        #     print("LEFT"*10)
+        if (r_ang> self.__rAng_ir.initVal + .4):
+            # if (r_ang> self.__rAng_ir.initVal + 2): #no wall on right
+            #     return False
+
+            if self.skipBeam:
+                self.skipBeam = False
+                self.timeFound_BEAM = time.monotonic()
+                return False
+            else:
+                self.skipBeam = True
+                self.timeFound_BEAM = time.monotonic()
+                return True
+        print("L + R:",l+r)
+        print("Lang + Rang:", l_ang+r_ang)
+        # print("LRANG_InitSum:", lR_AngInit_sum)
+        
+
+        space = "*"*10 + "\n"
+        print(space)
+
+        print("DIFFERENCE R", r_ang - self.__rAng_ir.initVal )
+        print("DIFFERENCE L", l_ang - self.__lAng_ir.initVal )
+        print(space)
+
+        return False
+
+
+    def showAllIr(self):
+        print("L Ang:",self.__lAng_ir.read())
+        # print("R Ang:", self.__rAng_ir.read())
+        print("L:",self.__l_ir.read())
+        # print("R", self.__r_ir.read())
+        # print("L fwd:",self.__lFwd_ir.read())
+        # print("R fwd",self.__rFwd_ir.read())
+
     def __continueForward(self):
+        if time.monotonic()-self.timeFound_BEAM > .5:
+            if self.isCornerBeam():
+                return False
         if (self.wallFront()):
             return False
 
