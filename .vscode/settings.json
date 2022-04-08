@@ -1,0 +1,13 @@
+{
+    "python.languageServer": "Pylance",
+    "python.linting.pylintEnabled": false,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingModuleSource": "none"
+    },
+    "python.analysis.extraPaths": [
+        "",
+        "/Users/aliahmedkhan/.vscode/extensions/joedevivo.vscode-circuitpython-0.1.17-darwin-arm64/stubs",
+        "/Users/aliahmedkhan/Library/Application Support/Code/User/globalStorage/joedevivo.vscode-circuitpython/bundle/20220405/adafruit-circuitpython-bundle-py-20220405/lib"
+    ],
+    "circuitpython.board.version": "7.0.0"
+}
