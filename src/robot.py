@@ -234,9 +234,11 @@ class Robot:
         if (special_case):
           while (self.__magnetometer.heading() <= 360 and self.__magnetometer.heading() >= 270):
               config.pixel.fill(config.Color["green"])
+              self.__rotateRight()
 
         while (self.__magnetometer.heading() <= target_heading):
           config.pixel.fill(config.Color["yellow"])
+          self.__rotateRight()
 
         self.brake()
         config.pixel.fill(config.Color["red"])
@@ -251,13 +253,45 @@ class Robot:
         if (special_case):
           while (self.__magnetometer.heading() >= 0 and self.__magnetometer.heading() <= 90):
               config.pixel.fill(config.Color["green"])
+              self.__rotateLeft()
 
         while (self.__magnetometer.heading() >= target_heading):
           config.pixel.fill(config.Color["yellow"])
+          self.__rotateLeft()
 
         self.brake()
         config.pixel.fill(config.Color["red"])
 
+    
+    def __rotateLeft(self):
+        prev_lEnc = self.__l_motor.position()
+        prev_rEnc = self.__r_motor.position()
+        self.__l_motor.run(0.3)
+        self.__r_motor.run(-0.3)
+        
+        while ((self.__l_motor.position() - prev_lEnc > 5) and (self.__r_motor.position() - prev_rEnc < -5)):
+            if (self.__l_motor.position() - prev_lEnc >= 5):
+                self.__l_motor.brake()
+            if (self.__r_motor.position() - prev_rEnc <= 5):
+                self.__r_motor.brake()
+        
+        # In case one of the motor doesn't brake:
+        self.brake()
+
+    def __rotateRight(self):
+        prev_lEnc = self.__l_motor.position()
+        prev_rEnc = self.__r_motor.position()
+        self.__l_motor.run(-0.3)
+        self.__r_motor.run(0.3)
+        
+        while ((self.__l_motor.position() - prev_lEnc < 5) and (self.__r_motor.position() - prev_rEnc > 5)):
+            if (self.__l_motor.position() - prev_lEnc <= 5):
+                self.__l_motor.brake()
+            if (self.__r_motor.position() - prev_rEnc >= 5):
+                self.__r_motor.brake()
+        
+        # In case one of the motor doesn't brake:
+        self.brake()
 
 
     # Encoder Correction - corrects robot direction with left/right encoders:
