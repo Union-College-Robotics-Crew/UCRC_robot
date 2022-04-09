@@ -13,7 +13,7 @@ rm -rf UCRC_robot
 ##Upload code from robot to main
 ```
 git init .
-git remote add https://github.com/Union-College-Robotics-Crew/UCRC_robot.git
+git remote add origin https://github.com/Union-College-Robotics-Crew/UCRC_robot.git
 git checkout <new branch>
 ```
 rest is usual git commit-push stuff.
